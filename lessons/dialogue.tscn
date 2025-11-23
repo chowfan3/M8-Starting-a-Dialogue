@@ -85,18 +85,6 @@ fit_content = true
 [node name="ActionButtonVBoxContainers" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer/ActionButtonVBoxContainers"]
-layout_mode = 2
-text = "Hello"
-
-[node name="Button3" type="Button" parent="VBoxContainer/ActionButtonVBoxContainers"]
-layout_mode = 2
-text = "Hey"
-
-[node name="Button2" type="Button" parent="VBoxContainer/ActionButtonVBoxContainers"]
-layout_mode = 2
-text = "Hi"
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("7_1fga6")
