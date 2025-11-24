@@ -15,11 +15,6 @@ run/main_scene="uid://chprvwfixox2y"
 config/features=PackedStringArray("4.5")
 config/icon="res://icon_start_a_dialog.png"
 
-[autoload]
-
-UITestPanel="*res://addons/gdpractice/tester/ui_test_panel.tscn"
-Metadata="*res://addons/gdpractice/practice_solutions/metadata.gd"
-
 [display]
 
 window/size/viewport_width=1920
