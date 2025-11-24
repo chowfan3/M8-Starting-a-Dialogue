@@ -15,51 +15,8 @@ var bodies := {
 ## - expression: a [code]Texture[/code] containing an expression
 ## - text: a [code]String[/code] containing the text the character says
 ## - character: a [code]Texture[/code] representing the character
-var dialogue_items: Array[Dictionary] = [
-	{
-		"expression": expressions["regular"],
-		"text": "Hi, I'm Sophia",
-		"character": bodies["sophia"],
-		"choices": {
-		"Hi":1,
-		"Hello":1,
-	},
-	},
-	{
-		"expression": expressions["regular"],
-		"text": "Hi, I'm not Sophia",
-		"character": bodies["pink"],
-		"choices": {
-		"Hi":2,
-		"Hello":2,
-	},
-	},
-	{
-		"expression": expressions["sad"],
-		"text": "Today I failed my math test",
-		"character": bodies["sophia"],
-		"choices": {
-		"Me too":3,
-		"Oh Nooooo":4,
-	},
-	},
-	{
-		"expression": expressions["happy"],
-		"text": "At least passed physics!",
-		"character": bodies["sophia"],
-		"choices": {
-		"Congrats":4,
-		"sure...":4,
-	},
-	},
-	{
-		"expression": expressions["happy"],
-		"text": "Ok Bye",
-		"character": bodies["sophia"],
-		"choices": {"Bye!! (quit)": -1},
-		},
-		
-]
+@export var dialogue_items: Array[DialogueItem] = []
+
 
 ## UI element that shows the texts
 @onready var rich_text_label: RichTextLabel = %RichTextLabel
@@ -78,20 +35,17 @@ var dialogue_items: Array[Dictionary] = [
 func _ready() -> void:
 	show_text(0)
 
-func create_buttons(choices_data: Dictionary) -> void:
+func create_buttons(choices_data: Array[DialogueChoice]) -> void:
 	for button in action_button_v_box_containers.get_children():
 		button.queue_free()
-	
-	for choice_text in choices_data:
+	for choice in choices_data:
 		var button := Button.new()
 		action_button_v_box_containers.add_child(button)
-		button.text = choice_text
-		
-		var target_line_idx: int = choices_data[choice_text]
-		
-		if target_line_idx == -1:
+		button.text = choice.text
+		if choice.is_quit == true:
 			button.pressed.connect(get_tree().quit)
-		else: 
+		else:
+			var target_line_idx := choice.target_line_idx
 			button.pressed.connect(show_text.bind(target_line_idx))
 			
 
@@ -102,10 +56,10 @@ func show_text(current_item_index: int) -> void:
 	# from the item, we extract the properties.
 	# We set the text to the rich text control
 	# And we set the appropriate expression texture
-	rich_text_label.text = current_item["text"]
-	expression.texture = current_item["expression"]
-	body.texture = current_item["character"]
-	create_buttons(current_item["choices"])
+	rich_text_label.text = current_item.text
+	expression.texture = current_item.expression
+	body.texture = current_item.character
+	create_buttons(current_item.choices)
 
 	# We set the initial visible ratio to the text to 0, so we can change it in the tween
 	rich_text_label.visible_ratio = 0.0
@@ -114,7 +68,7 @@ func show_text(current_item_index: int) -> void:
 	# A variable that holds the amount of time for the text to show, in seconds
 	# We could write this directly in the tween call, but this is clearer.
 	# We will also use this for deciding on the sound length
-	var text_appearing_duration: float = current_item["text"].length() / 30.0
+	var text_appearing_duration: float = current_item.text.length() / 30.0
 	# We show the text slowly
 	tween.tween_property(rich_text_label, "visible_ratio", 1.0, text_appearing_duration)
 	# We randomize the audio playback's start time to make it sound different
