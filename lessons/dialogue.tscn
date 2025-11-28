@@ -37,6 +37,7 @@ metadata/_custom_type_script = "uid://dafsel3k3010w"
 [sub_resource type="Resource" id="Resource_1m3r0"]
 script = ExtResource("4_xlxck")
 text = "Blue"
+target_line_idx = 1
 metadata/_custom_type_script = "uid://dafsel3k3010w"
 
 [sub_resource type="Resource" id="Resource_1f3kq"]
